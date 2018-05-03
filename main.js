@@ -3,6 +3,7 @@ const electron = require('electron')
 const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
+const ipcMain = electron.ipcMain;
 
 const path = require('path')
 const url = require('url')
@@ -13,7 +14,7 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 800, height: 600, resizable: true})
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -33,6 +34,10 @@ function createWindow () {
     mainWindow = null
   })
 }
+
+ipcMain.on('set-size', (e, width, height) => {
+    mainWindow.setContentSize(width, height, true)
+})
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
